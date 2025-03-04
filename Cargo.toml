@@ -6,7 +6,7 @@
     readme = "README.md"
     description = "Bitbite is a simple trait that would help you interact bytes with flags easily"
     repository = "https://github.com/shalev-david/bitbite"
-    keywords = ["bit", "bits", "byte", "flag", "flags", "bitwise"]
+    keywords = ["bit", "bits", "byte", "flag", "bitwise"]
     categories = ["parsing"]
 
 [dependencies]
