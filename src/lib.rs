@@ -40,6 +40,10 @@
 //!
 //! # Bigger flags
 //! The trait `BitBite` and the struct `Flag` are generics and can hold any primitive integer, so you could have a struct that hold 1,2,4 bytes of data and still use the flags seamlessly.
+//!
+//! ## Mutability  
+//! You can now edit your bytes with flags with ease, you can use `set_flag` to override the entire flag's mask and change it as you please. \
+//!  And in case you don't want to override the previous values you can `set_on` different bits to hold their state as it is.
 use num_traits::PrimInt;
 use std::ops::DerefMut;
 
