@@ -40,8 +40,6 @@
 //!
 //! # Bigger flags
 //! The trait `BitBite` and the struct `Flag` are generics and can hold any primitive integer, so you could have a struct that hold 1,2,4 bytes of data and still use the flags seamlessly.
-//!
-//!
 use num_traits::PrimInt;
 use std::ops::DerefMut;
 
