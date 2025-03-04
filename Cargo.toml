@@ -1,12 +1,13 @@
 [package]
-name = "bitbite"
-version = "0.1.0"
-edition = "2021"
-license-file = "LICENSE"
-readme = "README.md"
-description = "Bitbite is a simple trait that would help you interact bytes with flags easily"
-repository = "https://github.com/shalev-david/bitbite"
-keywords = ["bit", "bits", "byte", "flag", "flags", "bitwise"]
-categories = ["parsing"]
+    name = "bitbite"
+    version = "0.1.0"
+    edition = "2021"
+    license-file = "LICENSE"
+    readme = "README.md"
+    description = "Bitbite is a simple trait that would help you interact bytes with flags easily"
+    repository = "https://github.com/shalev-david/bitbite"
+    keywords = ["bit", "bits", "byte", "flag", "flags", "bitwise"]
+    categories = ["parsing"]
+
 [dependencies]
-num-traits = "0.2.19"
+    num-traits = "0.2.19"
