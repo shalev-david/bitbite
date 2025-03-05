@@ -1,13 +1,19 @@
 [package]
-name = "bitbite_derive"
-version = "0.1.0"
-edition = "2024"
+    name = "bitbite_derive"
+    version = "0.1.0"
+    edition = "2024"
+    license-file = "LICENSE"
+    readme = "README.md"
+    description = "Bitbite is a simple trait that would help you interact bytes with flags easily"
+    repository = "https://github.com/shalev-david/bitbite"
+    keywords = ["bit", "bitbite", "derive", "flag", "bitwise"]
+    categories = ["parsing"]
 
 [lib]
-proc-macro = true
+    proc-macro = true
 
 [dependencies]
-bitbite = "0.1.2"
-deref-derive = "0.1.0"
-quote = "1.0.39"
-syn = "2.0.99"
+    bitbite = "0.1.2"
+    deref-derive = "0.1.0"
+    quote = "1.0.39"
+    syn = "2.0.99"
