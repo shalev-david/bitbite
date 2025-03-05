@@ -136,7 +136,7 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0010);
     /// ```
     fn set_flag(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
-        self.reset_flag(&flag);
+        self.reset_flag(flag);
         let inner = self.deref_mut();
         *inner = *inner | (value << flag.shift())
     }

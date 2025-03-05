@@ -1,4 +1,6 @@
 # Bitbite
+![pipeline](https://github.com/shalev-david/bitbite/actions/workflows/rust.yml/badge.svg?branch=main)
+
 Bitbite is a simple trait that would help you interact bytes with flags easily
 
 # How to use
