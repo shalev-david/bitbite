@@ -2,7 +2,7 @@
 The Bitbite derive is used to save you a bit of code and make the usage cleaner. \
 For the cleanest code I recommend using [deref_derive](https://crates.io/crates/derive_deref)
 # Usage:
-```
+```rust
 use bitbite::*;
 use bitbite_derive::Bitbite;
 use deref_derive::*;
