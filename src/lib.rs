@@ -214,4 +214,46 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
         let inner = self.deref_mut();
         *inner = (*inner) & !flag.mask;
     }
+
+    /// `set_off` will turn off specific bits of the flag \
+    /// You pass in the bits you want to set off \
+    /// For example we have this flag `0b1110`, and we want to set off the second bit from the right we would have to pass \
+    /// `set_off(0b0100)` - this will turn off only the second bit and all other bits will remain the same \
+    /// **Output** - `0b1011`
+    ///
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1110_0000);
+    ///  t.set_off(0b0100, &NesCartridgeF6::LOWER_MAPPER);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1010);
+    /// ```
+    fn set_off(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
+        let new_value = !value & self.get_flag(flag);
+        self.set_flag(new_value, flag);
+    }
 }
