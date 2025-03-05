@@ -44,9 +44,34 @@
 //! ## Mutability  
 //! You can now edit your bytes with flags with ease, you can use `set_flag` to override the entire flag's mask and change it as you please. \
 //!  And in case you don't want to override the previous values you can `set_on` different bits to hold their state as it is.
+//! # Derive &emsp; ![Latest Version Derive]
+//! For easier use you can add the [bitbite_derive](https://crates.io/crates/bitbite_derive) crate \
+//! I also recommend using [defer_derive](https://crates.io/crates/deref_derive) for maximum ease
+//! ```rust
+//! use bitbite::*;
+//! use bitbite_derive::Bitbite;
+//! use deref_derive::*;
+//! 
+//! #[derive(Bitbite, Deref, DerefMut)]
+//! struct Header(pub u8);
+//! ```
 use num_traits::PrimInt;
 use std::ops::DerefMut;
 
+/// # Flag
+/// **Flag** is used to declare flags \
+/// To initialize the flag you need to pass in the flag's mask and units.
+/// ```
+/// use bitbite::Flag;
+/// 
+/// struct Header(u8);
+/// 
+/// impl Header {
+///     pub const FIRST_NIBBLE : Flag<u8> = Flag::new(0b0000_1111);
+///     pub const SECOND_NIBBLE_FIRST_HALF : Flag<u8> = Flag::new(0b0011_0000);
+///     pub const SECOND_NIBBLE_SECOND_HALF : Flag<u8> = Flag::new(0b0011_0000);
+/// }
+/// ```
 #[derive(Debug)]
 pub struct Flag<T: PrimInt> {
     pub(crate) mask: T,

@@ -58,7 +58,7 @@ You can now edit your bytes with flags with ease, you can use `set_flag` to over
 
 # Derive &emsp; ![Latest Version Derive]
 For easier use you can add the [bitbite_derive](https://crates.io/crates/bitbite_derive) crate \
-I also recommend using [dered_derive](https://crates.io/crates/deref_derive) for maximum ease
+I also recommend using [defer_derive](https://crates.io/crates/deref_derive) for maximum ease
 ```rust
 use bitbite::*;
 use bitbite_derive::Bitbite;
