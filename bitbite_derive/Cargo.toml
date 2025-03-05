@@ -4,7 +4,7 @@
     edition = "2024"
     license-file = "LICENSE"
     readme = "README.md"
-    description = "Bitbite is a simple trait that would help you interact bytes with flags easily"
+    description = "Adds Bitbite derive"
     repository = "https://github.com/shalev-david/bitbite"
     keywords = ["bit", "bitbite", "derive", "flag", "bitwise"]
     categories = ["parsing"]
