@@ -1,8 +1,8 @@
 //! # Bitbite derive
 //! The Bitbite derive is used to save you a bit of code and make the usage cleaner. \
-//! For the cleanest code I recommend using [deref_derive](https://crates.io/crates/derive_deref)
+//! For the cleanest code I recommend using [deref-derive](https://crates.io/crates/derive_deref)
 //! # Usage:
-//! ```
+//! ```rust
 //! use bitbite::*;
 //! use bitbite_derive::Bitbite;
 //! use deref_derive::*;
@@ -50,7 +50,7 @@ const ATTR_NAME: &str = "bitbite";
 
 /// # Bitbite derive
 /// The Bitbite derive is used to save you a bit of code and make the usage cleaner. \
-/// For the cleanest code I recommend using [deref_derive](https://crates.io/crates/derive_deref)
+/// For the cleanest code I recommend using [deref-derive](https://crates.io/crates/derive_deref)
 /// # Usage:
 /// ```
 /// use bitbite::*;
@@ -70,7 +70,7 @@ const ATTR_NAME: &str = "bitbite";
 /// # Multi fielded structs
 /// In case you have more than one field you can use the `bitbite` attribute
 /// # Usage:
-/// ```rust
+/// ```
 /// use bitbite::*;
 /// use bitbite_derive::Bitbite;
 /// use deref_derive::*;
