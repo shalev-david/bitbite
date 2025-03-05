@@ -1,4 +1,10 @@
-# Bitbite
+# Bitbite &emsp; [![Build Status]][actions] [![Latest Version]][crates.io]
+
+[Build Status]: https://img.shields.io/github/actions/workflow/status/shalev-david/bitbite/rust.yml?branch=main
+[actions]: https://github.com/shalev-david/bitbite/actions?query=branch%3Amain
+[Latest Version]: https://img.shields.io/crates/v/bitbite.svg
+[crates.io]: https://crates.io/crates/bitbite
+
 Bitbite is a simple trait that would help you interact bytes with flags easily
 
 # How to use
