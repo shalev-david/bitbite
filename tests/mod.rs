@@ -68,7 +68,7 @@ mod test {
         assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0100);
         t.set_flag(0b0010, &NesCartridgeF6::LOWER_MAPPER);
         assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0010);
-        t.set_on(0b0100, &NesCartridgeF6::LOWER_MAPPER);
+        t.bit_or_assign(0b0100, &NesCartridgeF6::LOWER_MAPPER);
         assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0110);
     }
     #[test]
@@ -79,7 +79,7 @@ mod test {
         assert_eq!(t.get_flag(&U16Flags::LAST_NIBBLE), 0b0110);
         t.set_flag(0b0101, &U16Flags::MIDDLE_NIBBLE);
         assert_eq!(t.get_flag(&U16Flags::MIDDLE_NIBBLE), 0b0101);
-        t.set_on(0b0010, &U16Flags::MIDDLE_NIBBLE);
+        t.bit_or_assign(0b0010, &U16Flags::MIDDLE_NIBBLE);
         assert_eq!(t.get_flag(&U16Flags::MIDDLE_NIBBLE), 0b0111);
     }
 }
