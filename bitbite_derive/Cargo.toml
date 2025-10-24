@@ -1,6 +1,6 @@
 [package]
     name = "bitbite_derive"
-    version = "0.1.1"
+    version = "0.1.2"
     edition = "2024"
     license-file = "LICENSE"
     readme = "README.md"
@@ -13,7 +13,7 @@
     proc-macro = true
 
 [dependencies]
-    bitbite = "0.1.2"
+    bitbite = "0.1.0"
     deref-derive = "0.1.0"
     quote = "1.0.39"
     syn = "2.0.99"
