@@ -43,11 +43,11 @@
 //!
 //! ## Mutability  
 //! You can now edit your bytes with flags with ease, you can use `set_flag` to override the entire flag's mask and change it as you please. \
-//!  And in case you don't want to override the previous values you can `set_on` different bits to hold their state as it is.
+//! And in case you don't want to override the previous values you can `set_on` different bits to hold their state as it is.
 //! # Derive &emsp; ![Latest Version Derive]
 //! For easier use you can add the [bitbite_derive](https://crates.io/crates/bitbite_derive) crate \
 //! I also recommend using [defer-derive](https://crates.io/crates/deref_derive) for maximum ease
-//! ```rust
+//! ```rust,ignore
 //! use bitbite::*;
 //! use bitbite_derive::Bitbite;
 //! use deref_derive::*;
