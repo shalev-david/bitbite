@@ -43,10 +43,10 @@
 //!
 //! ## Mutability  
 //! You can now edit your bytes with flags with ease, you can use `set_flag` to override the entire flag's mask and change it as you please. \
-//! And in case you don't want to override the previous values you can `set_on` different bits to hold their state as it is.
+//! And in case you don't want to override the previous values you can use `bit_or_assign` to do bitwise operations on the flag.
 //! # Derive &emsp; ![Latest Version Derive]
 //! For easier use you can add the [bitbite_derive](https://crates.io/crates/bitbite_derive) crate \
-//! I also recommend using [defer-derive](https://crates.io/crates/deref_derive) for maximum ease
+//! I also recommend using [deref_derive](https://crates.io/crates/deref_derive) for maximum ease
 //! ```rust,ignore
 //! use bitbite::*;
 //! use bitbite_derive::Bitbite;
@@ -69,7 +69,7 @@ use std::ops::DerefMut;
 /// impl Header {
 ///     pub const FIRST_NIBBLE : Flag<u8> = Flag::new(0b0000_1111);
 ///     pub const SECOND_NIBBLE_FIRST_HALF : Flag<u8> = Flag::new(0b0011_0000);
-///     pub const SECOND_NIBBLE_SECOND_HALF : Flag<u8> = Flag::new(0b0011_0000);
+///     pub const SECOND_NIBBLE_SECOND_HALF : Flag<u8> = Flag::new(0b1100_0000);
 /// }
 /// ```
 #[derive(Debug)]
@@ -106,7 +106,6 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  impl Bitbite for NesCartridgeF6 {
     ///     type Unit = u8;
     ///  }
-    ///
     ///  # impl Deref for NesCartridgeF6 {
     ///  #     type Target = u8;
     ///  #     fn deref(&self) -> &Self::Target{
@@ -151,7 +150,6 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  #       &mut self.0    
     ///  #     }       
     ///  # }
-    ///
     ///  impl Bitbite for NesCartridgeF6 {
     ///      type Unit = u8;
     ///  }
@@ -189,7 +187,6 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  #       &mut self.0    
     ///  #     }       
     ///  # }
-    ///
     ///  impl Bitbite for NesCartridgeF6 {
     ///      type Unit = u8;
     ///  }
@@ -198,6 +195,7 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  t.set_on(0b0010, &NesCartridgeF6::LOWER_MAPPER);
     ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0110);
     /// ```
+    #[deprecated(since = "0.2.0", note = "Please use `bit_or_assign` instead.")]
     fn set_on(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
         let inner = self.deref_mut();
         *inner = *inner | (value << flag.shift())
@@ -226,7 +224,6 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  #       &mut self.0    
     ///  #     }       
     ///  # }
-    ///
     ///  impl Bitbite for NesCartridgeF6 {
     ///      type Unit = u8;
     ///  }
@@ -268,7 +265,6 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  #       &mut self.0    
     ///  #     }       
     ///  # }
-    ///
     ///  impl Bitbite for NesCartridgeF6 {
     ///      type Unit = u8;
     ///  }
@@ -277,8 +273,226 @@ pub trait Bitbite: DerefMut<Target = Self::Unit> {
     ///  t.set_off(0b0100, &NesCartridgeF6::LOWER_MAPPER);
     ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1010);
     /// ```
+    #[deprecated(since = "0.2.0", note = "Please use `bit_and_assign` instead.")]
     fn set_off(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
         let new_value = !value & self.get_flag(flag);
         self.set_flag(new_value, flag);
+    }
+
+    /// `bit_or` will do the bitwise `|` operation on the given flag and will return the value **without mutating the data** \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_0000);
+    ///  assert_eq!(t.bit_or(0b0100, &NesCartridgeF6::LOWER_MAPPER), 0b1110);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1010);
+    /// ```
+    fn bit_or(&self, value: Self::Unit, flag: &Flag<Self::Unit>) -> Self::Unit {
+        let inner_flagged = self.get_flag(flag);
+        inner_flagged | value
+    }
+
+    /// `bit_or_assign` will do the bitwise `|` operation on the given flag and will **and will assign the result to the flag** \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_0000);
+    /// t.bit_or_assign(0b0100, &NesCartridgeF6::LOWER_MAPPER);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1110);
+    /// ```
+    fn bit_or_assign(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
+        let inner = self.deref_mut();
+        *inner = *inner | (value << flag.shift())
+    }
+
+    /// `bit_and` will do the bitwise `&` operation on the given flag and will return the value **without mutating the data**  \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_0000);
+    ///  
+    ///  assert_eq!(t.bit_and(0b0110, &NesCartridgeF6::LOWER_MAPPER), 0b0010);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1010);
+    /// ```
+    fn bit_and(&self, value: Self::Unit, flag: &Flag<Self::Unit>) -> Self::Unit {
+        let inner_flagged = self.get_flag(flag);
+        inner_flagged & value
+    }
+
+    /// `bit_and_assign` will do the bitwise `&` operation on the given flag and will **and will assign the result to the flag** \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_0000);
+    ///
+    ///  t.bit_and_assign(0b0110, &NesCartridgeF6::LOWER_MAPPER);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b0010);
+    /// ```
+    fn bit_and_assign(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
+        self.set_flag(self.bit_and(value, flag), flag);
+    }
+
+    /// `bit_xor` will do the bitwise `^` operation on the given flag and will return the value **without mutating the data** \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_1111);
+    ///  assert_eq!(t.bit_xor(0b0110, &NesCartridgeF6::LOWER_MAPPER), 0b1100);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1010);
+    /// ```
+    fn bit_xor(&self, value: Self::Unit, flag: &Flag<Self::Unit>) -> Self::Unit {
+        let inner_flagged = self.get_flag(flag);
+        inner_flagged ^ value
+    }
+
+    /// `bit_xor_assign` will do the bitwise `^` operation on the given flag and will **and will assign the result to the flag** \
+    /// ## Usage:
+    /// ```
+    /// # use std::ops::{Deref, DerefMut};
+    ///  use bitbite::{Flag, Bitbite};
+    ///
+    ///  struct NesCartridgeF6(pub u8);
+    ///  impl NesCartridgeF6 {
+    ///    pub const LOWER_MAPPER: Flag<u8> = Flag::<u8>::new(0b1111_0000);
+    ///  }
+    ///
+    ///  # impl Deref for NesCartridgeF6 {
+    ///  #     type Target = u8;
+    ///  #     fn deref(&self) -> &Self::Target {
+    ///  #       &self.0    
+    ///  #     }       
+    ///  # }
+    ///  #
+    ///  # impl DerefMut for NesCartridgeF6 {
+    ///  #     fn deref_mut(&mut self) -> &mut Self::Target {
+    ///  #       &mut self.0    
+    ///  #     }       
+    ///  # }
+    ///  impl Bitbite for NesCartridgeF6 {
+    ///      type Unit = u8;
+    ///  }
+    ///  
+    ///  let mut t = NesCartridgeF6(0b1010_1111);
+    ///  t.bit_xor_assign(0b0110, &NesCartridgeF6::LOWER_MAPPER);
+    ///  assert_eq!(t.get_flag(&NesCartridgeF6::LOWER_MAPPER), 0b1100);
+    /// ```
+    fn bit_xor_assign(&mut self, value: Self::Unit, flag: &Flag<Self::Unit>) {
+        self.set_flag(self.bit_xor(value, flag), flag);
     }
 }
